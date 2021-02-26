@@ -17,18 +17,14 @@ class Board extends React.Component {
     }
 
     render() {
-
-        const setFuncStateBoard = (a,b) =>{
-            console.log('setFuncStateBoard')
-        }
     
     
         const resetGame = () =>{
-            this.state.squares = [[null,null,null],[null,null,null],[null,null,null]];
-        }
-    
-        const setBoardValues = () =>{
-            stateBoard = [[2,1,1],[2,2,1],[1,2,2]];
+            const squares = [[null,null,null],[null,null,null],[null,null,null]];
+            this.setState({
+                squares: squares,
+                nextPlayer: true,
+            });
         }
     
         const converter = (arr) => {
@@ -41,18 +37,17 @@ class Board extends React.Component {
     
     
         const doRandomMove = (arr) =>{
-            arr = stateBoard.flat(Infinity);
+            arr = this.state.squares.flat(Infinity);
             let ind = arr.indexOf(null);
             arr[ind] = 1;
-            stateBoard = converter(arr);
+            this.state.squares = converter(arr);
             }
     
+
         const getConsoleBoardValues = () => {
-            console.log(stateBoard)
+            console.log(this.state.squares)
         }
     
-        const handleClick = () => {
-        } 
     
         //передаем stateBoard
         const isEnd = (squares) => {
@@ -71,21 +66,37 @@ class Board extends React.Component {
 
         let whoWin = () =>{
             if (isEnd(this.state.squares)) 
-                return 'win 0'
+                return 'win x'
             else
-                return 'win x'    
+                return 'win o'    
 
         }
 
+        let whoTurn = () => {
+            if (this.state.nextPlayer) 
+                return 'ход x'
+            else
+                return 'ход o'
+        }
 
-        let handleSquare = (i, j) => {
-            console.log('click')
+        let changeTurn = () => {
             const squares = this.state.squares.slice();
-            squares[i][j] = this.state.nextPlayer ? 'X' : 'O';
             this.setState({
                 squares: squares,
                 nextPlayer: !this.state.nextPlayer,
             });
+        }
+
+
+        let handleSquare = (i, j) => {
+            const squares = this.state.squares.slice();
+            if(squares[i][j] == null){
+                squares[i][j] = this.state.nextPlayer ? 'X' : 'O';
+                this.setState({
+                    squares: squares,
+                    nextPlayer: !this.state.nextPlayer,
+                });
+            }
 
             if(isEnd(this.state.squares))
                 {alert(whoWin())}
@@ -95,15 +106,14 @@ class Board extends React.Component {
 
 
 
-
+        //создание квадратов вынеси в отдельные методы и мб циклы
         return(
         <div >
-            <button onClick={() => {console.log(isEnd(this.state.squares))}}>is Win?</button>
             <button onClick={() => {resetGame()}}>Новая игра</button>
-            <button onClick={() => {setBoardValues()}}>автозаполнение клеток</button>
             <button onClick={() => {getConsoleBoardValues()}}>получение значения поля в консоль</button>
             <button onClick={() => {doRandomMove()}}>ход компьютера</button>
-
+            <button onClick={() => {changeTurn()}}>смена игрока</button>
+            <div>Сейчас ход {whoTurn()}</div>
             <div>
                 <div className="row">
                     <Square value={this.state.squares[0][0]} onClick={() => handleSquare(0, 0)}/>
