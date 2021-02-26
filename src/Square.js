@@ -1,15 +1,17 @@
 import "./App.css";
 import { useState } from "react";
+import React from 'react';
 
-export default function Square(props){
 
-    let [stateSquare, setStateSquare] = useState(props.value);
+class Square extends React.Component {
 
-    const f = function(){
-        console.log(stateSquare)
-        setStateSquare(props.value);
+    render() {
+      return (
+        <button className="square" onClick={this.props.setFuncStateBoard}>
+          {this.props.value}
+        </button>
+      );
     }
-
-
-    return <div onClick={() => f()} className="square" >{stateSquare}</div>;
 }
+
+export default Square;

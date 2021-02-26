@@ -1,79 +1,77 @@
 import { useState } from "react";
-import Square from "./Square";
+import Square from './Square'
 import "./App.css";
+import React from 'react'
 
 
-export default function Board(props){
+class Board extends React.Component {
+    
 
+    constructor(props) {
+        super(props);
 
-    let board = [[2,2,1],[3,3,null],[5,6,1]];             
-
-    let [stateBoard, setStateBoard] = useState(board);
-
-    const stateIncBoard = () =>{
-        setStateCounter.map((el)=>{el = 1})
+        this.state = {
+        squares: [[2,1,1],[2,2,1],[1,2,2]],
+        nextPlayer: true,
+        };
     }
 
-    const showState = () =>{
-        console.log(stateBoard)
-    }
+    render() {
 
-    const resetGame = () =>{
-        stateBoard = [[null,null,null],[null,null,null],[null,null,null]];
-    }
-
-    const setBoardValues = () =>{
-        stateBoard = [[2,1,1],
-                      [2,2,1],
-                      [1,2,2]];
-    }
-
-    const converter = (arr) => {
-        let rez = [];
-        for(let i = 0; i <3; i++){
-        rez.push(arr.splice(0,3));
+        const setFuncStateBoard = (a,b) =>{
+            console.log('setFuncStateBoard')
         }
-        return rez;
+    
+    
+        const resetGame = () =>{
+            stateBoard = [[null,null,null],[null,null,null],[null,null,null]];
         }
-
-
-    const doRandomMove = (arr) =>{
-        arr = stateBoard.flat(Infinity);
-        let ind = arr.indexOf(null);
-        arr[ind] = 1;
-        stateBoard = converter(arr);
+    
+        const setBoardValues = () =>{
+            stateBoard = [[2,1,1],[2,2,1],[1,2,2]];
         }
-
-    const getConsoleBoardValues = () => {
-        console.log(stateBoard)
-    }
-
-    const isEnd = (el) => {
-        
-        //for (let i = 0; i <= 2; i++){
-        //    if (!((stateBoard[i] == el) || (stateBoard[i+3] == el) || (stateBoard[i+6] == el)))
-        //        return false
-        //}
-        //for (let i = 0; i <= 8; i+3){
-        //    if (!((stateBoard[i] == el) || (stateBoard[i+3] == el) || (stateBoard[i+6] == el)))
-        //        return false
-        //}
-
-        return true
+    
+        const converter = (arr) => {
+            let rez = [];
+            for(let i = 0; i <3; i++){
+                rez.push(arr.splice(0,3));
+            }
+            return rez;
+            }
+    
+    
+        const doRandomMove = (arr) =>{
+            arr = stateBoard.flat(Infinity);
+            let ind = arr.indexOf(null);
+            arr[ind] = 1;
+            stateBoard = converter(arr);
+            }
+    
+        const getConsoleBoardValues = () => {
+            console.log(stateBoard)
+        }
+    
+        const handleClick = () => {
+        } 
+    
+        //передаем stateBoard
+        const isEnd = (squares) => {
+            squares = squares.flat(Infinity);
             
-    }
+            const lines = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6],];
+    
+            for (let i = 0; i < lines.length; i++) {
+                const [a, b, c] = lines[i];
+                if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                    return squares[a];
+                }
+            }
+                return null;
+        }
 
-
-    /*const stateIncCounter = () =>{
-        setStateCounter(stateCounter + 1)
-    }*/
-
-    //<button onClick={stateIncCounter}/>
-
-    return(
+        return(
         <div >
-            {stateBoard}
-            <button onClick={() => {console.log(isEnd(null))}}>is Win?</button>
+            <button onClick={() => {console.log(isEnd(stateBoard))}}>is Win?</button>
             <button onClick={() => {resetGame()}}>Новая игра</button>
             <button onClick={() => {setBoardValues()}}>автозаполнение клеток</button>
             <button onClick={() => {getConsoleBoardValues()}}>получение значения поля в консоль</button>
@@ -81,21 +79,24 @@ export default function Board(props){
 
             <div>
                 <div className="row">
-                    <Square value={stateBoard[0][0]}/>
-                    <Square value={stateBoard[0][1]}/>
-                    <Square value={stateBoard[0][2]}/>
+                    <Square value={this.state.squares[0][0]} onClick={() => setFuncStateBoard(0,0)}/>
+                    <Square value={this.state.squares[0][1]}/>
+                    <Square value={this.state.squares[0][2]}/>
                 </div>
                 <div className="row">
-                    <Square value={stateBoard[1][0]}/>
-                    <Square value={stateBoard[1][1]}/>
-                    <Square value={stateBoard[1][2]}/>
+                    <Square value={this.state.squares[1][0]}/>
+                    <Square value={this.state.squares[1][1]}/>
+                    <Square value={this.state.squares[1][2]}/>
                 </div>
                 <div className="row">
-                    <Square value={stateBoard[2][0]}/>
-                    <Square value={stateBoard[2][1]}/>
-                    <Square value={stateBoard[2][2]}/>
+                    <Square value={this.state.squares[2][0]}/>
+                    <Square value={this.state.squares[2][1]}/>
+                    <Square value={this.state.squares[2][2]}/>
                 </div>
             </div>
         </div>
     )
+    }
 }
+
+export default Board;
