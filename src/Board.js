@@ -13,6 +13,7 @@ class Board extends React.Component {
         this.state = {
         squares: [[null,null,null],[null,null,null],[null,null,null]],
         nextPlayer: true,
+        canChanges: true
         };
     }
 
@@ -24,6 +25,7 @@ class Board extends React.Component {
             this.setState({
                 squares: squares,
                 nextPlayer: true,
+                canChanges: true
             });
         }
     
@@ -36,11 +38,15 @@ class Board extends React.Component {
             }
     
     
-        const doRandomMove = (arr) =>{
-            arr = this.state.squares.flat(Infinity);
+        const doRandomMove = () =>{
+            let arr = this.state.squares.flat(Infinity);
             let ind = arr.indexOf(null);
-            arr[ind] = 1;
-            this.state.squares = converter(arr);
+            arr[ind] = this.state.nextPlayer ? 'X' : 'O';
+            this.setState({
+                squares: converter(arr),
+                nextPlayer: !this.state.nextPlayer,
+                canChanges: false
+            });
             }
     
 
@@ -50,8 +56,8 @@ class Board extends React.Component {
     
     
         //передаем stateBoard
-        const isEnd = (squares) => {
-            squares = squares.flat(Infinity);
+        const isEnd = () => {
+            let squares = this.state.squares.flat(Infinity);
             
             const lines = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6],];
     
@@ -65,12 +71,12 @@ class Board extends React.Component {
         }
 
         let whoWin = () =>{
-            if (isEnd(this.state.squares)) 
-                return 'win x'
-            else
-                return 'win o'    
-
-        }
+            if (isEnd()) {
+                if(this.state.nextPlayer)
+                    return 'win x'
+                else
+                    return 'win o'
+            }}    
 
         let whoTurn = () => {
             if (this.state.nextPlayer) 
@@ -84,6 +90,7 @@ class Board extends React.Component {
             this.setState({
                 squares: squares,
                 nextPlayer: !this.state.nextPlayer,
+                canChanges: this.state.canChanges
             });
         }
 
@@ -95,11 +102,15 @@ class Board extends React.Component {
                 this.setState({
                     squares: squares,
                     nextPlayer: !this.state.nextPlayer,
+                    canChanges: false
                 });
             }
 
             if(isEnd(this.state.squares))
-                {alert(whoWin())}
+                {
+                    alert(whoWin());
+                    setTimeout(resetGame(),5000)
+                }
         }
 
         
@@ -110,9 +121,8 @@ class Board extends React.Component {
         return(
         <div >
             <button onClick={() => {resetGame()}}>Новая игра</button>
-            <button onClick={() => {getConsoleBoardValues()}}>получение значения поля в консоль</button>
             <button onClick={() => {doRandomMove()}}>ход компьютера</button>
-            <button onClick={() => {changeTurn()}}>смена игрока</button>
+            <button disabled={!this.state.canChanges} onClick={() => {changeTurn()}}>смена игрока</button>
             <div>Сейчас ход {whoTurn()}</div>
             <div>
                 <div className="row">
