@@ -13,7 +13,8 @@ class Board extends React.Component {
         this.state = {
         squares: this.nullArray,
         nextPlayer: true,
-        canChanges: true
+        canChanges: true,
+        isWin: false
         };
     }
 
@@ -57,19 +58,19 @@ class Board extends React.Component {
             for (let i = 0; i < lines.length; i++) {
                 const [a, b, c] = lines[i];
                 if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                    return squares[a];
+                    this.setState({
+                        isWin: true
+                    });
                 }
             }
-                return null;
         }
 
         let whoWin = () =>{
-            if (isEnd()) {
                 if(this.state.nextPlayer)
                     return 'win x'
                 else
                     return 'win o'
-            }}    
+            }    
 
         let whoTurn = () => {
             if (this.state.nextPlayer) 
@@ -82,28 +83,28 @@ class Board extends React.Component {
             const squares = this.state.squares.slice();
             this.setState({
                 squares: squares,
-                nextPlayer: !this.state.nextPlayer,
-                canChanges: this.state.canChanges
+                nextPlayer: !this.state.nextPlayer
             });
         }
+
 
         let handleSquare = (i) => {
             const squares = this.state.squares.slice();
             if(squares[i] == null){
                 squares[i] = this.state.nextPlayer ? 'X' : 'O';
                 this.setState({
-                    squares: squares,
-                    nextPlayer: !this.state.nextPlayer,
-                    canChanges: false
-                });
+                squares: squares,
+                nextPlayer: !this.state.nextPlayer,
+                canChanges: false
+            });
             }
-
-            if(isEnd(this.state.squares))
-                {
-                    alert(whoWin());
-                    setTimeout(resetGame(),5000)
-                }
-        }
+            isEnd()
+            
+            if(this.state.isWin){
+                resetGame();
+                alert(whoWin());
+            }
+            }
 
         const CreateSquare =(props) => {
             return <Square value={this.state.squares[props.i]} onClick={() => handleSquare(props.i)}/>
