@@ -1,20 +1,15 @@
 import { useState } from "react";
 import "./App.css";
-import React from 'react'
-
-const Square = props => {return (
-    <button className="square" onClick={props.onClick}>
-        {props.value}
-    </button>
-);};
+import React from 'react';
+import Square from './Square';
 
 
-class Board extends React.Component {
-    
 
+class Board extends React.Component {  
     constructor(props) {
         super(props);
         this.nullArray = [null,null,null,null,null,null,null,null,null];
+
         this.state = {
         squares: this.nullArray,
         nextPlayer: true,
@@ -23,8 +18,6 @@ class Board extends React.Component {
     }
 
     render() {
-    
-    
         const resetGame = () =>{
             const squares = this.nullArray;
             this.setState({
@@ -94,7 +87,6 @@ class Board extends React.Component {
             });
         }
 
-
         let handleSquare = (i) => {
             const squares = this.state.squares.slice();
             if(squares[i] == null){
@@ -113,13 +105,10 @@ class Board extends React.Component {
                 }
         }
 
-
         const CreateSquare =(props) => {
             return <Square value={this.state.squares[props.i]} onClick={() => handleSquare(props.i)}/>
         }
 
-        
-        //создание квадратов вынеси в отдельные методы и мб циклы
         return(
         <div >
             <button onClick={() => {resetGame()}}>Новая игра</button>
