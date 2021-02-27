@@ -11,7 +11,7 @@ class Board extends React.Component {
         super(props);
 
         this.state = {
-        squares: [[null,null,null],[null,null,null],[null,null,null]],
+        squares: [null,null,null,null,null,null,null,null,null],
         nextPlayer: true,
         canChanges: true
         };
@@ -21,7 +21,7 @@ class Board extends React.Component {
     
     
         const resetGame = () =>{
-            const squares = [[null,null,null],[null,null,null],[null,null,null]];
+            const squares = [null,null,null,null,null,null,null,null,null];
             this.setState({
                 squares: squares,
                 nextPlayer: true,
@@ -39,20 +39,15 @@ class Board extends React.Component {
     
     
         const doRandomMove = () =>{
-            let arr = this.state.squares.flat(Infinity);
+            let arr = this.state.squares;
             let ind = arr.indexOf(null);
             arr[ind] = this.state.nextPlayer ? 'X' : 'O';
             this.setState({
-                squares: converter(arr),
+                squares: arr,
                 nextPlayer: !this.state.nextPlayer,
                 canChanges: false
             });
             }
-    
-
-        const getConsoleBoardValues = () => {
-            console.log(this.state.squares)
-        }
     
     
         //передаем stateBoard
@@ -95,10 +90,10 @@ class Board extends React.Component {
         }
 
 
-        let handleSquare = (i, j) => {
+        let handleSquare = (i) => {
             const squares = this.state.squares.slice();
-            if(squares[i][j] == null){
-                squares[i][j] = this.state.nextPlayer ? 'X' : 'O';
+            if(squares[i] == null){
+                squares[i] = this.state.nextPlayer ? 'X' : 'O';
                 this.setState({
                     squares: squares,
                     nextPlayer: !this.state.nextPlayer,
@@ -113,10 +108,15 @@ class Board extends React.Component {
                 }
         }
 
+        let createSquare = (i) => {
+            return(
+                <div>
+                    <Square value={this.state.squares[i]} onClick={() => handleSquare(i)}/>
+                </div>
+            )
+        }
+
         
-
-
-
         //создание квадратов вынеси в отдельные методы и мб циклы
         return(
         <div >
@@ -126,19 +126,19 @@ class Board extends React.Component {
             <div>Сейчас ход {whoTurn()}</div>
             <div>
                 <div className="row">
-                    <Square value={this.state.squares[0][0]} onClick={() => handleSquare(0, 0)}/>
-                    <Square value={this.state.squares[0][1]} onClick={() => handleSquare(0, 1)}/>
-                    <Square value={this.state.squares[0][2]} onClick={() => handleSquare(0, 2)}/>
+                    <Square value={this.state.squares[0]} onClick={() => handleSquare(0)}/>
+                    <Square value={this.state.squares[1]} onClick={() => handleSquare(1)}/>
+                    <Square value={this.state.squares[2]} onClick={() => handleSquare(2)}/>
                 </div>
                 <div className="row">
-                    <Square value={this.state.squares[1][0]} onClick={() => handleSquare(1, 0)}/>
-                    <Square value={this.state.squares[1][1]} onClick={() => handleSquare(1, 1)}/>
-                    <Square value={this.state.squares[1][2]} onClick={() => handleSquare(1, 2)}/>
+                    <Square value={this.state.squares[3]} onClick={() => handleSquare(3)}/>
+                    <Square value={this.state.squares[4]} onClick={() => handleSquare(4)}/>
+                    <Square value={this.state.squares[5]} onClick={() => handleSquare(5)}/>
                 </div>
                 <div className="row">
-                    <Square value={this.state.squares[2][0]} onClick={() => handleSquare(2, 0)}/>
-                    <Square value={this.state.squares[2][1]} onClick={() => handleSquare(2, 1)}/>
-                    <Square value={this.state.squares[2][2]} onClick={() => handleSquare(2, 2)}/>
+                    <Square value={this.state.squares[6]} onClick={() => handleSquare(6)}/>
+                    <Square value={this.state.squares[7]} onClick={() => handleSquare(7)}/>
+                    <Square value={this.state.squares[8]} onClick={() => handleSquare(8)}/>
                 </div>
             </div>
         </div>
