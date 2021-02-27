@@ -1,7 +1,12 @@
 import { useState } from "react";
-import Square from './Square'
 import "./App.css";
 import React from 'react'
+
+const Square = props => {return (
+    <button className="square" onClick={props.onClick}>
+        {props.value}
+    </button>
+);};
 
 
 class Board extends React.Component {
@@ -9,9 +14,9 @@ class Board extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this.nullArray = [null,null,null,null,null,null,null,null,null];
         this.state = {
-        squares: [null,null,null,null,null,null,null,null,null],
+        squares: this.nullArray,
         nextPlayer: true,
         canChanges: true
         };
@@ -21,7 +26,7 @@ class Board extends React.Component {
     
     
         const resetGame = () =>{
-            const squares = [null,null,null,null,null,null,null,null,null];
+            const squares = this.nullArray;
             this.setState({
                 squares: squares,
                 nextPlayer: true,
@@ -52,7 +57,7 @@ class Board extends React.Component {
     
         //передаем stateBoard
         const isEnd = () => {
-            let squares = this.state.squares.flat(Infinity);
+            let squares = this.state.squares;
             
             const lines = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6],];
     
@@ -108,12 +113,9 @@ class Board extends React.Component {
                 }
         }
 
-        let createSquare = (i) => {
-            return(
-                <div>
-                    <Square value={this.state.squares[i]} onClick={() => handleSquare(i)}/>
-                </div>
-            )
+
+        const CreateSquare =(props) => {
+            return <Square value={this.state.squares[props.i]} onClick={() => handleSquare(props.i)}/>
         }
 
         
@@ -126,19 +128,19 @@ class Board extends React.Component {
             <div>Сейчас ход {whoTurn()}</div>
             <div>
                 <div className="row">
-                    <Square value={this.state.squares[0]} onClick={() => handleSquare(0)}/>
-                    <Square value={this.state.squares[1]} onClick={() => handleSquare(1)}/>
-                    <Square value={this.state.squares[2]} onClick={() => handleSquare(2)}/>
+                    <CreateSquare i={0}/>
+                    <CreateSquare i={1}/>
+                    <CreateSquare i={2}/>
                 </div>
                 <div className="row">
-                    <Square value={this.state.squares[3]} onClick={() => handleSquare(3)}/>
-                    <Square value={this.state.squares[4]} onClick={() => handleSquare(4)}/>
-                    <Square value={this.state.squares[5]} onClick={() => handleSquare(5)}/>
+                    <CreateSquare i={3}/>   
+                    <CreateSquare i={4}/>
+                    <CreateSquare i={5}/>
                 </div>
                 <div className="row">
-                    <Square value={this.state.squares[6]} onClick={() => handleSquare(6)}/>
-                    <Square value={this.state.squares[7]} onClick={() => handleSquare(7)}/>
-                    <Square value={this.state.squares[8]} onClick={() => handleSquare(8)}/>
+                    <CreateSquare i={6}/>
+                    <CreateSquare i={7}/>
+                    <CreateSquare i={8}/>
                 </div>
             </div>
         </div>
